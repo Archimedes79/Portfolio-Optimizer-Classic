@@ -130,7 +130,7 @@
 		android:layout_marginHorizontal="16dp"
 		android:layout_marginTop="4dp"
 		android:layout_marginBottom="4dp"
-		app:layout_constraintBottom_toTopOf="@+id/btnBack"
+		app:layout_constraintBottom_toTopOf="@+id/tvDisclaimer"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/slidersCard">
@@ -149,6 +149,20 @@
 		</ScrollView>
 
 	</com.google.android.material.card.MaterialCardView>
+
+	<!-- The buy/sell figures above read like advice; say right there that they are not. -->
+	<TextView
+		android:id="@+id/tvDisclaimer"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="20dp"
+		android:layout_marginBottom="4dp"
+		android:text="@string/optimize_disclaimer"
+		android:textColor="@color/textSecondary"
+		android:textSize="11sp"
+		app:layout_constraintBottom_toTopOf="@+id/btnBack"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
 
 	<!-- ======================== NAVIGATION SECTION =========================== -->
 

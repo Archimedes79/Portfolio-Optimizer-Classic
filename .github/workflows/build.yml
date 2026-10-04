@@ -84,6 +84,11 @@ jobs:
       - name: Build the release APK
         run: ./gradlew --stacktrace assembleRelease
 
+      # The file name is deliberately fixed: a release always carries
+      # PortfolioOptimizerClassic.apk, so the README can link to
+      # .../releases/latest/download/PortfolioOptimizerClassic.apk and that one
+      # URL keeps working for every future release. Which key signed it is said
+      # in the release notes instead.
       - name: Collect the APK
         id: collect
         run: |
@@ -92,12 +97,28 @@ jobs:
           shopt -s nullglob
           apks=(app/build/outputs/apk/release/*.apk)
           if [ ${#apks[@]} -eq 0 ]; then echo "No APK produced"; exit 1; fi
-          apk="${apks[0]}"
           if [ -n "${RELEASE_KEYSTORE_FILE:-}" ]; then signed="signed"; else signed="debugsigned"; fi
-          name="PortfolioOptimizerClassic-${GITHUB_REF_NAME//\//-}-${signed}.apk"
-          cp "$apk" "dist/$name"
+          cp "${apks[0]}" "dist/PortfolioOptimizerClassic.apk"
+          (cd dist && sha256sum PortfolioOptimizerClassic.apk > SHA256SUMS.txt)
           echo "signed=$signed" >> "$GITHUB_OUTPUT"
-          echo "Built dist/$name"
+          echo "Built dist/PortfolioOptimizerClassic.apk"
+          cat dist/SHA256SUMS.txt
+
+      # The licence texts must be inside the APK, because the APK is passed around
+      # without the repository (see THIRD-PARTY-NOTICES.md). Fail the build if they
+      # are not, instead of publishing an APK that breaks the licences.
+      - name: Check the licence texts are inside the APK
+        run: |
+          set -euo pipefail
+          listing="$(unzip -l dist/PortfolioOptimizerClassic.apk)"
+          for f in LICENSE.txt THIRD-PARTY-NOTICES.md Apache-2.0.txt \
+                   commons-math3-NOTICE.txt commons-math3-LICENSE.txt; do
+            grep -q "assets/legal/$f" <<<"$listing" \
+              || { echo "assets/legal/$f is missing from the APK"; exit 1; }
+          done
+          unzip -p dist/PortfolioOptimizerClassic.apk assets/legal/LICENSE.txt \
+            | grep -q '^Required Notice:' \
+            || { echo "Required Notice line missing from the packaged LICENSE"; exit 1; }
 
       - name: Upload the test report on failure
         if: failure()
@@ -111,7 +132,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: PortfolioOptimizerClassic-apk
-          path: dist/*.apk
+          path: |
+            dist/PortfolioOptimizerClassic.apk
+            dist/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 90
 
@@ -122,20 +145,33 @@ jobs:
           SIGNED: ${{ steps.collect.outputs.signed }}
         run: |
           set -euo pipefail
-          shopt -s nullglob
-          apks=(dist/*.apk)
-          if [ ${#apks[@]} -eq 0 ]; then echo "No APK to publish"; exit 1; fi
+          assets=(dist/PortfolioOptimizerClassic.apk dist/SHA256SUMS.txt)
+          for a in "${assets[@]}"; do
+            [ -s "$a" ] || { echo "Nothing to publish: $a is missing"; exit 1; }
+          done
           if [ "$SIGNED" = "signed" ]; then
             note="Signed with the project upload key."
           else
             note="Signed with the Android debug key. Installable, but it cannot update an install that used a different key. See docs/RELEASING.md."
           fi
+          notes="$(cat <<EOF
+          Install \`PortfolioOptimizerClassic.apk\` on Android 7.0 or newer. Installing from outside an app store requires allowing "Install unknown apps" for your browser or file manager once.
+
+          $note
+
+          Check the download with \`sha256sum -c SHA256SUMS.txt\` (Windows: \`certutil -hashfile PortfolioOptimizerClassic.apk SHA256\`).
+
+          **Not investment advice.** Prices come from Yahoo Finance's unofficial endpoints; the project is not affiliated with Yahoo, and Yahoo's terms restrict automated access and commercial use. For private, non-commercial use only. See THIRD-PARTY-NOTICES.md.
+
+          Licence: [PolyForm Noncommercial 1.0.0](https://github.com/$GITHUB_REPOSITORY/blob/$GITHUB_REF_NAME/LICENSE) - source-available, not open source. The full licence texts of the app and its libraries are inside the app (About, Licences).
+          EOF
+          )"
           # Re-running the same tag must not fail on an existing release.
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            echo "Release $GITHUB_REF_NAME already exists - uploading the APK with --clobber"
-            gh release upload "$GITHUB_REF_NAME" dist/*.apk --clobber
+            echo "Release $GITHUB_REF_NAME already exists - uploading the assets with --clobber"
+            gh release upload "$GITHUB_REF_NAME" "${assets[@]}" --clobber
           else
-            gh release create "$GITHUB_REF_NAME" dist/*.apk \
+            gh release create "$GITHUB_REF_NAME" "${assets[@]}" \
               --title "Portfolio Optimizer Classic $GITHUB_REF_NAME" \
-              --notes "$(printf 'Install the APK below on Android 7.0 or newer.\n\n%s\n\nInstalling from outside an app store requires allowing "Install unknown apps" for your browser or file manager once.' "$note")"
+              --notes "$notes"
           fi

@@ -60,10 +60,17 @@ table shows, for every position, how many shares you would have to buy or sell.
 
 ## Installation
 
-1. Download the current `.apk` from [**Releases**](../../releases/latest).
+1. Download [**PortfolioOptimizerClassic.apk**](https://github.com/Archimedes79/Portfolio-Optimizer-Classic/releases/latest/download/PortfolioOptimizerClassic.apk)
+   &ndash; always the newest release; older ones are on the
+   [Releases](../../releases) page. Optionally check it against `SHA256SUMS.txt`
+   from the same release (`sha256sum -c SHA256SUMS.txt`, on Windows
+   `certutil -hashfile PortfolioOptimizerClassic.apk SHA256`).
 2. On opening it, Android asks once for permission to install apps from this
    source (your browser or file manager) &ndash; confirm.
 3. Install. Requires **Android 7.0 (API 24)** or newer.
+
+The APK is built by [GitHub Actions](../../actions/workflows/build.yml) on a plain
+hosted runner &ndash; no Docker, no container &ndash; from the tagged source.
 
 > As long as no signing key is configured, the APK is signed with the Android
 > debug key. It installs normally, but it cannot update an installation that
@@ -73,7 +80,8 @@ table shows, for every position, how many shares you would have to buy or sell.
 
 Three screens: the portfolio with its chart, the asset management, and the
 optimiser. The buttons at the bottom &ndash; **Assets**, **Sync** and
-**Optimize** &ndash; take you there.
+**Optimize** &ndash; take you there. **About**, top right, shows the disclaimer,
+the data-source notice and the licence texts.
 
 ### Adding positions
 
@@ -193,7 +201,7 @@ Java, no Compose dependency, three activities.
 | Mathematics | [Apache Commons Math 3](https://commons.apache.org/proper/commons-math/) (covariance matrix, BOBYQA) |
 | Charts | [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) |
 | Persistence | [Gson](https://github.com/google/gson) &rarr; `filesDir/portfolio.json` |
-| Price data | public Yahoo Finance endpoints, monthly values interpolated linearly onto days; values before the first and after the last support point are clamped, not extrapolated |
+| Price data | unofficial Yahoo Finance endpoints (not a documented or licensed API &ndash; see [Disclaimer](#disclaimer)), monthly values interpolated linearly onto days; values before the first and after the last support point are clamped, not extrapolated |
 | Currency | automatic conversion to EUR via the respective FX pair (including GBp); if fetching the exchange rate fails, the price is taken unchanged |
 
 ## Background
@@ -209,14 +217,36 @@ it may be delayed, incomplete or wrong, and it may disappear at any time. Every
 investment decision and its consequences are yours alone.
 
 Yahoo and Yahoo Finance are trademarks of their owner. This project is not
-affiliated with, endorsed or sponsored by Yahoo; the app only requests publicly
-reachable data from your device, and that data stays subject to its provider's
-terms.
+affiliated with, endorsed or sponsored by Yahoo.
+
+### Where the prices come from
+
+The app has no official or licensed access to market data. Your device requests
+prices from the endpoints behind Yahoo Finance's website. Yahoo shut down its
+official finance API in 2017 and offers none today, so these endpoints are
+undocumented, and Yahoo has not authorised this app to use them. Yahoo's terms of
+service restrict automated access and commercial use; that the data is reachable
+without a login is not a permission. For you that means:
+
+- Use the app **privately and non-commercially** only, at your own responsibility.
+- It can stop working at any time, for example if Yahoo blocks it.
+- The project redistributes no prices. Neither the PolyForm licence nor a
+  commercial licence for the code grants any right to Yahoo's data; using the
+  software commercially would first require swapping in a data source you are
+  licensed to use.
+- The app says what it is in its `User-Agent` header
+  (`PortfolioOptimizerClassic (+https://github.com/Archimedes79/Portfolio-Optimizer-Classic)`)
+  instead of posing as a web browser, and spaces its requests.
+
+More in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md#market-data).
 
 ## Licence
 
 Source-available under [PolyForm Noncommercial 1.0.0](LICENSE), not open source:
 you may use, modify and share it for any noncommercial purpose; commercial use
 needs a separate licence (open an issue). The licence covers this code only, not
-the price data, which stays under its provider's terms. Notes on the libraries
-used in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+the price data (see [above](#where-the-prices-come-from)). The libraries the app
+uses keep their own licences, listed in
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) with the full texts in
+[`LICENSES/`](LICENSES/); the same texts are packaged inside the APK (**About**
+&rarr; **Licences**), because the APK is passed around without this repository.

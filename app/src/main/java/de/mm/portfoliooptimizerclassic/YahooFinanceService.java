@@ -35,9 +35,16 @@ public class YahooFinanceService {
     private static final String TAG = "YahooFinanceService";
     private static final String SEARCH_URL = "https://query2.finance.yahoo.com/v1/finance/search?q=";
     private static final String CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/";
-    private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            + "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
-    
+    /**
+     * The app says what it is. It used to pose as desktop Chrome, which is
+     * pretending to be something it is not towards a service whose terms restrict
+     * automated access; see THIRD-PARTY-NOTICES.md, "Market data".
+     */
+    static final String USER_AGENT = "PortfolioOptimizerClassic "
+            + "(+https://github.com/Archimedes79/Portfolio-Optimizer-Classic)";
+    /** Pause between consecutive requests, so one action never fires a burst. */
+    private static final long REQUEST_PAUSE_MS = 200;
+
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private final Gson gson = new Gson();
@@ -70,6 +77,7 @@ public class YahooFinanceService {
                 for (int i = 0; i < limit; i++) {
                     JsonObject quote = quotes.get(i).getAsJsonObject();
                     if (!quote.has("symbol")) continue;
+                    if (i > 0) Thread.sleep(REQUEST_PAUSE_MS);
 
                     String symbol = quote.get("symbol").getAsString();
                     String name = quote.has("shortname") ? quote.get("shortname").getAsString() : 
@@ -175,7 +183,7 @@ public class YahooFinanceService {
                     if (!fetchDataSync(security, "max")) {
                         failed.add(security.getDisplayName());
                     }
-                    Thread.sleep(200); // Small delay to be nice to API
+                    Thread.sleep(REQUEST_PAUSE_MS); // Small delay to be nice to API
                 }
                 // Recalculate common date range after all data is refreshed
                 portfolio.recalculateCommonRange();

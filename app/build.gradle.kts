@@ -29,6 +29,41 @@ val appVersionCode: Int = (System.getenv("appVersionCode")
 val appVersionName: String = System.getenv("appVersionName")
     ?: providers.gradleProperty("appVersionName").orNull ?: "1.0.0"
 
+/*
+ * The APK is distributed without the repository, so the licence texts travel
+ * inside it: PolyForm Noncommercial and its Required Notice line, the Apache
+ * 2.0 text, and the notices that Apache Commons Math carries (Android's
+ * packaging strips the copies inside the jar). Copied at build time from the
+ * repository root, so there is exactly one source of truth.
+ */
+abstract class CopyLegalAssets : DefaultTask() {
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.NONE)
+    abstract val licence: RegularFileProperty
+
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.NONE)
+    abstract val thirdPartyNotices: RegularFileProperty
+
+    @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val licencesDir: DirectoryProperty
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun copy() {
+        val target = outputDir.get().asFile.resolve("legal")
+        target.deleteRecursively()
+        target.mkdirs()
+        licence.get().asFile.copyTo(target.resolve("LICENSE.txt"))
+        thirdPartyNotices.get().asFile.copyTo(target.resolve("THIRD-PARTY-NOTICES.md"))
+        licencesDir.get().asFile.listFiles()?.filter { it.isFile }
+            ?.forEach { it.copyTo(target.resolve(it.name)) }
+    }
+}
+
 android {
     namespace = "de.mm.portfoliooptimizerclassic"
     compileSdk {
@@ -81,6 +116,19 @@ android {
     testOptions {
         // Lets plain JUnit tests exercise classes that call android.util.Log.
         unitTests.isReturnDefaultValues = true
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        val copyLegalAssets = tasks.register<CopyLegalAssets>(
+            "copy${variant.name.replaceFirstChar { it.uppercase() }}LegalAssets"
+        ) {
+            licence.set(rootProject.layout.projectDirectory.file("LICENSE"))
+            thirdPartyNotices.set(rootProject.layout.projectDirectory.file("THIRD-PARTY-NOTICES.md"))
+            licencesDir.set(rootProject.layout.projectDirectory.dir("LICENSES"))
+        }
+        variant.sources.assets?.addGeneratedSourceDirectory(copyLegalAssets, CopyLegalAssets::outputDir)
     }
 }
 

@@ -62,10 +62,18 @@ müsstest.
 
 ## Installation
 
-1. Unter [**Releases**](../../releases/latest) die aktuelle `.apk` herunterladen.
+1. [**PortfolioOptimizerClassic.apk**](https://github.com/Archimedes79/Portfolio-Optimizer-Classic/releases/latest/download/PortfolioOptimizerClassic.apk)
+   herunterladen &ndash; immer das neueste Release; ältere stehen unter
+   [Releases](../../releases). Optional gegen `SHA256SUMS.txt` aus demselben
+   Release prüfen (`sha256sum -c SHA256SUMS.txt`, unter Windows
+   `certutil -hashfile PortfolioOptimizerClassic.apk SHA256`).
 2. Beim Öffnen fragt Android einmalig nach der Erlaubnis, Apps aus dieser
    Quelle zu installieren (Browser bzw. Dateimanager) &ndash; bestätigen.
 3. Installieren. Voraussetzung: **Android 7.0 (API 24)** oder neuer.
+
+Die APK baut [GitHub Actions](../../actions/workflows/build.yml) auf einem
+normalen gehosteten Runner &ndash; ohne Docker, ohne Container &ndash; aus dem
+getaggten Quelltext.
 
 > Solange noch kein Signaturschlüssel hinterlegt ist, wird die APK mit dem
 > Android-Debug-Key signiert. Sie lässt sich normal installieren, kann aber
@@ -76,6 +84,8 @@ müsstest.
 
 Drei Bildschirme: das Portfolio mit dem Chart, die Werteverwaltung und der
 Optimierer. Unten führen dich **Werte**, **Sync** und **Optimieren** dorthin.
+**Info** oben rechts zeigt den Haftungsausschluss, den Hinweis zur Datenquelle
+und die Lizenztexte.
 
 ### Positionen anlegen
 
@@ -198,7 +208,7 @@ Java, keine Compose-Abhängigkeit, drei Activities.
 | Mathematik | [Apache Commons Math 3](https://commons.apache.org/proper/commons-math/) (Kovarianzmatrix, BOBYQA) |
 | Charts | [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) |
 | Persistenz | [Gson](https://github.com/google/gson) &rarr; `filesDir/portfolio.json` |
-| Kursdaten | öffentliche Endpunkte von Yahoo Finance, Monatswerte, linear auf Tageswerte interpoliert; Werte vor dem ersten und nach dem letzten Stützpunkt werden geklemmt, nicht extrapoliert |
+| Kursdaten | inoffizielle Endpunkte von Yahoo Finance (keine dokumentierte oder lizenzierte Schnittstelle &ndash; siehe [Haftungsausschluss](#haftungsausschluss)), Monatswerte, linear auf Tageswerte interpoliert; Werte vor dem ersten und nach dem letzten Stützpunkt werden geklemmt, nicht extrapoliert |
 | Währung | automatische Umrechnung in EUR über das jeweilige FX-Paar (inkl. GBp); schlägt der Abruf des Wechselkurses fehl, wird der Preis unverändert übernommen |
 
 ## Hintergrund
@@ -215,15 +225,38 @@ jederzeit ausfallen. Jede Anlageentscheidung und deren Folgen liegen allein bei
 dir.
 
 Yahoo und Yahoo Finance sind Marken ihres jeweiligen Inhabers. Dieses Projekt
-ist weder mit Yahoo verbunden noch von Yahoo unterstützt oder gesponsert; die
-App ruft von deinem Gerät aus lediglich öffentlich erreichbare Daten ab, und
-diese Daten unterliegen weiterhin den Nutzungsbedingungen ihres Anbieters.
+ist weder mit Yahoo verbunden noch von Yahoo unterstützt oder gesponsert.
+
+### Woher die Kurse kommen
+
+Die App hat keinen offiziellen oder lizenzierten Zugang zu Marktdaten. Dein
+Gerät fragt die Kurse bei den Endpunkten hinter der Website von Yahoo Finance
+ab. Yahoo hat seine offizielle Finanz-API 2017 abgeschaltet und bietet heute
+keine an; diese Endpunkte sind also undokumentiert, und Yahoo hat diese App
+nicht zu ihrer Nutzung autorisiert. Die Nutzungsbedingungen von Yahoo
+beschränken automatisierten Zugriff und kommerzielle Nutzung; dass die Daten
+ohne Login erreichbar sind, ist keine Erlaubnis. Für dich heißt das:
+
+- Nutze die App nur **privat und nichtkommerziell**, auf eigene Verantwortung.
+- Sie kann jederzeit aufhören zu funktionieren, etwa wenn Yahoo sie sperrt.
+- Das Projekt verbreitet keine Kurse. Weder die PolyForm-Lizenz noch eine
+  kommerzielle Lizenz für den Code räumt Rechte an den Daten von Yahoo ein; wer
+  die Software kommerziell nutzen will, muss zuvor eine Datenquelle einbauen,
+  die er nutzen darf.
+- Die App sagt im `User-Agent`-Header, was sie ist
+  (`PortfolioOptimizerClassic (+https://github.com/Archimedes79/Portfolio-Optimizer-Classic)`),
+  statt sich als Webbrowser auszugeben, und verteilt ihre Anfragen zeitlich.
+
+Mehr in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md#market-data).
 
 ## Lizenz
 
 Quelltext verfügbar unter [PolyForm Noncommercial 1.0.0](LICENSE), nicht Open
 Source: Nutzung, Änderung und Weitergabe sind für jeden nichtkommerziellen
 Zweck erlaubt; kommerzielle Nutzung braucht eine gesonderte Lizenz (bitte ein
-Issue eröffnen). Die Lizenz gilt nur für diesen Code, nicht für die Kursdaten,
-die bei den Bedingungen ihres Anbieters bleiben. Hinweise zu den verwendeten
-Bibliotheken in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+Issue eröffnen). Die Lizenz gilt nur für diesen Code, nicht für die Kursdaten
+(siehe [oben](#woher-die-kurse-kommen)). Die verwendeten Bibliotheken behalten
+ihre eigenen Lizenzen, aufgelistet in
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) mit den vollständigen Texten
+in [`LICENSES/`](LICENSES/); dieselben Texte stecken in der APK (**Info**
+&rarr; **Lizenzen**), weil die APK ohne dieses Repository weitergegeben wird.

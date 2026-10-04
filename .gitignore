@@ -23,3 +23,9 @@ keystore.properties
 /app/build
 /app/release
 /dist
+
+# Per-machine IDE state: device serials, local emulator paths, plugin settings
+/.idea/deploymentTargetSelector.xml
+/.idea/deviceManager.xml
+/.idea/appInsightsSettings.xml
+/.idea/copilot.data.migration.ask2agent.xml

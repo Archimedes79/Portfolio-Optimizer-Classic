@@ -1,6 +1,7 @@
 package de.mm.portfoliooptimizerclassic;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,6 +9,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btnSync).setOnClickListener(v -> syncPortfolio());
+
+        findViewById(R.id.btnAbout).setOnClickListener(v -> showAbout());
 
         findViewById(R.id.btnOptimize).setOnClickListener(v -> {
             Intent intent = new Intent(this, OptimizeActivity.class);
@@ -211,6 +215,46 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnSync).setEnabled(enabled);
         findViewById(R.id.btnAddRemove).setEnabled(enabled);
         findViewById(R.id.btnOptimize).setEnabled(enabled);
+    }
+
+    /**
+     * Disclaimer, data-source notice and licence line. This is where a user who got
+     * only the APK, and never saw the README, is told what the app is and is not.
+     */
+    private void showAbout() {
+        String version = "";
+        try {
+            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException ignored) {
+            // The About text is still complete without the version number.
+        }
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.about_title)
+                .setMessage(getString(R.string.about_message, version,
+                        LegalNotices.requiredNotice(this)))
+                .setPositiveButton(android.R.string.ok, null)
+                .setNeutralButton(R.string.about_licences, (d, w) -> showLicences())
+                .show();
+    }
+
+    /** The complete licence texts packaged into the APK. */
+    private void showLicences() {
+        TextView text = new TextView(this);
+        text.setText(LegalNotices.fullText(this));
+        text.setTextColor(getColor(R.color.textPrimary));
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11f);
+        text.setTypeface(Typeface.MONOSPACE);
+        int pad = dpToPx(16);
+        text.setPadding(pad, pad, pad, pad);
+
+        ScrollView scroll = new ScrollView(this);
+        scroll.addView(text);
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.about_licences)
+                .setView(scroll)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
 
     private void showErrorDialog(String title, String message) {

@@ -73,4 +73,10 @@
     <!-- Added while fixing the release review findings -->
     <string name="optimize_not_enough_data">Zu wenig Daten im sichtbaren Zeitfenster. Zieh den Graphen weiter auf oder f\u00fcge einen Wert mit l\u00e4ngerer Historie hinzu.</string>
     <string name="error_technical_detail">Die Anfrage ist fehlgeschlagen.\n\nDetails: %1$s</string>
+    <!-- Added with the legal review: About screen and disclaimer -->
+    <string name="main_btn_about">Info</string>
+    <string name="about_title">Über Portfolio Optimizer Classic</string>
+    <string name="about_licences">Lizenzen</string>
+    <string name="about_message">Version %1$s\n\nDiese App ist ein Lern- und Analysewerkzeug. Ihre Ergebnisse sind keine Anlageberatung, keine Empfehlung und kein Angebot zum Kauf oder Verkauf von Finanzinstrumenten. Jede Anlageentscheidung liegt allein bei dir.\n\nDein Gerät fragt die Kurse bei den Schnittstellen hinter Yahoo Finance ab. Das ist keine offizielle oder lizenzierte Schnittstelle: Yahoo hat die App nicht autorisiert und ist nicht mit ihr verbunden, und die Nutzungsbedingungen von Yahoo beschränken automatisierten Zugriff und kommerzielle Nutzung. Nutze die App nur privat und nichtkommerziell, auf eigene Verantwortung. Die Daten können verzögert oder falsch sein und jederzeit ausfallen.\n\nDein Portfolio liegt nur auf diesem Gerät; die App hat weder Konto noch Server. (Das Android-Systembackup kann es einschließen.)\n\n%2$s\nLizenziert unter der PolyForm Noncommercial License 1.0.0 (https://polyformproject.org/licenses/noncommercial/1.0.0). Kommerzielle Nutzung braucht eine gesonderte Lizenz. Bibliotheken von Drittanbietern behalten ihre eigenen Lizenzen – siehe Lizenzen.</string>
+    <string name="optimize_disclaimer">Keine Anlageberatung. Kurse: Yahoo Finance (inoffizielle Quelle, nicht verbunden).</string>
 </resources>

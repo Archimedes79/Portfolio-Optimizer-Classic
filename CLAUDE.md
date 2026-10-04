@@ -19,17 +19,21 @@ The maintainer writes German — answer in German.
 
 ## Current state
 
-Released. `master` and the tag `v1.0.0` are pushed, the repo is renamed, and CI has
-run green three times — twice on `master`, once on the tag — so the code compiles
-and the 18 unit tests pass. The feared `compileSdk { release(36) { minorApiLevel =
-1 } }` problem did not materialise: the workflow's fallback to plain
+Released: `v1.0.0` and `v1.0.1` exist. CI builds green, the code compiles and the
+unit tests pass. The feared `compileSdk { release(36) { minorApiLevel = 1 } }`
+problem did not materialise: the workflow's fallback to plain
 `platforms;android-36` is what actually carries the build.
 
-One thing is open: the four `RELEASE_*` secrets do not exist yet, so the published
-APK is **debug-signed** (`PortfolioOptimizerClassic-v1.0.0-debugsigned.apk`). It
-installs, but no later signed build can update it. Add the secrets as
-`docs/RELEASING.md` describes and cut a new tag; the asset is then named
-`…-signed.apk`.
+The legal review changed how releases look: the asset is now always
+`PortfolioOptimizerClassic.apk` (plus `SHA256SUMS.txt`), so the README's
+`releases/latest/download/…` link is stable. `v1.0.0`/`v1.0.1` predate that and
+predate the licence texts inside the APK; the stable link only works from the
+first release after the change.
+
+One thing is open: the four `RELEASE_*` secrets do not exist yet, so published
+APKs are **debug-signed** (the release notes say so). They install, but no later
+signed build can update them. Add the secrets as `docs/RELEASING.md` describes and
+cut a new tag.
 
 ## Commands
 
@@ -50,6 +54,21 @@ Needs JDK 21 and Android SDK platform 36 (minor API level 36.1). minSdk is 24.
   Keep the canonical text in `LICENSE` unchanged. Do not suggest an OSI licence or
   a licence badge. A new dependency must be permissively licensed and must be added
   to `THIRD-PARTY-NOTICES.md`.
+- The APK ships without the repository, so the licence texts travel inside it:
+  `app/build.gradle.kts` copies `LICENSE`, `THIRD-PARTY-NOTICES.md` and `LICENSES/`
+  into `assets/legal/`, and About → Licences shows them. Android strips the
+  `META-INF/LICENSE*`/`NOTICE*` files out of dependency jars, so a dependency that
+  carries notices of its own (Commons Math does: BSD-style Minpack, odex, Mersenne
+  Twister, Sobol) needs them copied verbatim into `LICENSES/` and listed in
+  `LegalNotices.FILES` and `LegalComplianceTest`. CI fails if they are missing from
+  the APK.
+- Yahoo is reached through undocumented endpoints that Yahoo has not authorised
+  third parties to use. Keep the `User-Agent` honest (never pose as a browser),
+  keep the pause between requests, and keep the disclaimer in the About screen, on
+  the optimiser screen and in the READMEs. Do not offer a commercial licence for
+  the app without saying the data source must be replaced first.
+- `.idea/` per-machine files (`deploymentTargetSelector.xml` holds a device serial
+  and a local path) are gitignored; do not re-add them.
 - `isMinifyEnabled = false` on purpose: the Gson keep rules in `proguard-rules.pro`
   are written but never verified on a device.
 - The working copy is Windows with CRLF. On a Linux side, set

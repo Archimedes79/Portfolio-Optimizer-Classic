@@ -74,4 +74,10 @@
     <!-- Added while fixing the release review findings -->
     <string name="optimize_not_enough_data">Not enough data in the visible window. Zoom out or add a position with a longer history.</string>
     <string name="error_technical_detail">The request failed.\n\nDetails: %1$s</string>
+    <!-- Added with the legal review: About screen and disclaimer -->
+    <string name="main_btn_about">About</string>
+    <string name="about_title">About Portfolio Optimizer Classic</string>
+    <string name="about_licences">Licences</string>
+    <string name="about_message">Version %1$s\n\nThis app is a learning and analysis tool. Its results are not investment advice, not a recommendation and not an offer to buy or sell any financial instrument. Every investment decision is yours alone.\n\nYour device requests prices from the endpoints behind Yahoo Finance. This is not an official or licensed interface: Yahoo has not authorised this app and is not affiliated with it, and Yahoo’s terms restrict automated access and commercial use. Use the app for private, non-commercial purposes only, at your own responsibility. The data may be delayed or wrong, and may disappear at any time.\n\nYour portfolio is stored only on this device; the app has no account and no server. (Android’s system backup may include it.)\n\n%2$s\nLicensed under the PolyForm Noncommercial License 1.0.0 (https://polyformproject.org/licenses/noncommercial/1.0.0). Commercial use needs a separate licence. Third-party libraries keep their own licences – see Licences.</string>
+    <string name="optimize_disclaimer">Not investment advice. Prices: Yahoo Finance (unofficial source, not affiliated).</string>
 </resources>
