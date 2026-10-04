@@ -5,14 +5,15 @@
 <h1 align="center">Portfolio Optimizer Classic</h1>
 
 <p align="center">
-  Eine Android-App, die ein privates Wertpapierdepot nach den klassischen
-  Verfahren der Portfoliotheorie umschichtet &ndash; lokal, ohne Konto,
+  Ein Portfolio-Optimierer für Android, der ein privates Wertpapierdepot nach
+  den klassischen Verfahren der Portfoliotheorie umschichtet &ndash; minimale
+  Varianz, maximale Sharpe-Ratio, minimaler Drawdown &ndash; lokal, ohne Konto,
   ohne Tracking.
 </p>
 
 <p align="center">
-  <a href="../../releases/latest"><img alt="Neuestes Release" src="https://img.shields.io/github/v/release/Archimedes79/Portfolio_Optimizer_Classic?label=Download%20APK"></a>
-  <a href="../../actions/workflows/build.yml"><img alt="Build" src="https://github.com/Archimedes79/Portfolio_Optimizer_Classic/actions/workflows/build.yml/badge.svg"></a>
+  <a href="../../releases/latest"><img alt="Neuestes Release" src="https://img.shields.io/github/v/release/Archimedes79/Portfolio-Optimizer-Classic?label=Download%20APK"></a>
+  <a href="../../actions/workflows/build.yml"><img alt="Build" src="https://github.com/Archimedes79/Portfolio-Optimizer-Classic/actions/workflows/build.yml/badge.svg"></a>
 </p>
 
 <p align="center"><a href="README.md">This page in English</a></p>
@@ -171,8 +172,8 @@ Nach einem Neustart der App nehmen wieder alle Positionen teil.
 ## Selbst bauen
 
 ```bash
-git clone https://github.com/Archimedes79/Portfolio_Optimizer_Classic.git
-cd Portfolio_Optimizer_Classic
+git clone https://github.com/Archimedes79/Portfolio-Optimizer-Classic.git
+cd Portfolio-Optimizer-Classic
 ./gradlew assembleRelease      # Windows: gradlew.bat assembleRelease
 ```
 
@@ -213,10 +214,16 @@ erreichbaren Quelle, können verzögert, unvollständig oder falsch sein und
 jederzeit ausfallen. Jede Anlageentscheidung und deren Folgen liegen allein bei
 dir.
 
+Yahoo und Yahoo Finance sind Marken ihres jeweiligen Inhabers. Dieses Projekt
+ist weder mit Yahoo verbunden noch von Yahoo unterstützt oder gesponsert; die
+App ruft von deinem Gerät aus lediglich öffentlich erreichbare Daten ab, und
+diese Daten unterliegen weiterhin den Nutzungsbedingungen ihres Anbieters.
+
 ## Lizenz
 
-Proprietär, Quellcode einsehbar. Lesen, private Nutzung und Selbstbauen sind
-erlaubt; Weiterverbreitung und kommerzielle Nutzung nicht ohne vorherige
-schriftliche Genehmigung. Details in [LICENSE](LICENSE), Hinweise zu den
-verwendeten Bibliotheken in
-[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+Quelltext verfügbar unter [PolyForm Noncommercial 1.0.0](LICENSE), nicht Open
+Source: Nutzung, Änderung und Weitergabe sind für jeden nichtkommerziellen
+Zweck erlaubt; kommerzielle Nutzung braucht eine gesonderte Lizenz (bitte ein
+Issue eröffnen). Die Lizenz gilt nur für diesen Code, nicht für die Kursdaten,
+die bei den Bedingungen ihres Anbieters bleiben. Hinweise zu den verwendeten
+Bibliotheken in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

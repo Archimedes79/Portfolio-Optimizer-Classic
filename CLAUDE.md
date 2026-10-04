@@ -46,7 +46,8 @@ Needs JDK 21 and Android SDK platform 36 (minor API level 36.1). minSdk is 24.
 - `README.md` is English and `README.de.md` is German; they are translations of one
   another. Change one and translate the change into the other in the same commit.
   Nothing checks this, so it only holds if you do it.
-- The licence is proprietary and source-available. Do not suggest an OSI licence or
+- The licence is PolyForm Noncommercial 1.0.0: source-available, not OSI open source.
+  Keep the canonical text in `LICENSE` unchanged. Do not suggest an OSI licence or
   a licence badge. A new dependency must be permissively licensed and must be added
   to `THIRD-PARTY-NOTICES.md`.
 - `isMinifyEnabled = false` on purpose: the Gson keep rules in `proguard-rules.pro`

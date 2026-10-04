@@ -5,14 +5,15 @@
 <h1 align="center">Portfolio Optimizer Classic</h1>
 
 <p align="center">
-  An Android app that rebalances a private securities portfolio using the
-  classical methods of portfolio theory &ndash; on the device, no account,
+  An Android portfolio optimizer that rebalances a private securities portfolio
+  with the classical methods of portfolio theory &ndash; minimum variance,
+  maximum Sharpe ratio, minimum drawdown &ndash; on the device, no account,
   no tracking.
 </p>
 
 <p align="center">
-  <a href="../../releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/Archimedes79/Portfolio_Optimizer_Classic?label=Download%20APK"></a>
-  <a href="../../actions/workflows/build.yml"><img alt="Build" src="https://github.com/Archimedes79/Portfolio_Optimizer_Classic/actions/workflows/build.yml/badge.svg"></a>
+  <a href="../../releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/Archimedes79/Portfolio-Optimizer-Classic?label=Download%20APK"></a>
+  <a href="../../actions/workflows/build.yml"><img alt="Build" src="https://github.com/Archimedes79/Portfolio-Optimizer-Classic/actions/workflows/build.yml/badge.svg"></a>
 </p>
 
 <p align="center"><a href="README.de.md">Diese Seite auf Deutsch</a></p>
@@ -167,8 +168,8 @@ restart of the app, every position takes part again.
 ## Building it yourself
 
 ```bash
-git clone https://github.com/Archimedes79/Portfolio_Optimizer_Classic.git
-cd Portfolio_Optimizer_Classic
+git clone https://github.com/Archimedes79/Portfolio-Optimizer-Classic.git
+cd Portfolio-Optimizer-Classic
 ./gradlew assembleRelease      # Windows: gradlew.bat assembleRelease
 ```
 
@@ -207,9 +208,15 @@ instruments. The price data comes from an unofficial, publicly reachable source;
 it may be delayed, incomplete or wrong, and it may disappear at any time. Every
 investment decision and its consequences are yours alone.
 
+Yahoo and Yahoo Finance are trademarks of their owner. This project is not
+affiliated with, endorsed or sponsored by Yahoo; the app only requests publicly
+reachable data from your device, and that data stays subject to its provider's
+terms.
+
 ## Licence
 
-Proprietary, source-available. Reading, private use and building it yourself are
-permitted; redistribution and commercial use are not, without prior written
-permission. Details in [LICENSE](LICENSE), notes on the libraries used in
-[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+Source-available under [PolyForm Noncommercial 1.0.0](LICENSE), not open source:
+you may use, modify and share it for any noncommercial purpose; commercial use
+needs a separate licence (open an issue). The licence covers this code only, not
+the price data, which stays under its provider's terms. Notes on the libraries
+used in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
